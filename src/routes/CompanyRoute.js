@@ -32,6 +32,18 @@ const companyRoute = async (fastify, options) => {
         .send({ error: "Internal Server Error", message: error.message });
     }
   });
+
+  fastify.put("/company/:id", async (request, reply) => {
+    const id = request.params.id;
+    const company = request.body;
+
+    try {
+      const response = await db.update(id, company);
+      reply.code(201).send(response);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
+  });
 };
 
 module.exports = companyRoute;

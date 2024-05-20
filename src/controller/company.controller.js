@@ -23,6 +23,15 @@ class Company {
 
     return company;
   }
+
+  async update(id, company) {
+    const { name } = company;
+
+    const update = sql`UPDATE company SET
+    name = ${name} WHERE id = ${id}`;
+
+    return update;
+  }
 }
 
 module.exports = Company;

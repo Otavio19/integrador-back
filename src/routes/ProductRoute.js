@@ -7,9 +7,13 @@ const productRoute = async (fastify, options) => {
   const dbUser = new User();
 
   fastify.get("/product", async (request, reply) => {
-    const products = await db.list();
+    try {
+      const products = await db.list();
 
-    return products;
+      reply.code(200).send(products);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
   });
 
   fastify.post("/product", async (request, reply) => {
@@ -47,12 +51,41 @@ const productRoute = async (fastify, options) => {
     }
   });
 
+  fastify.get("/product/:id", async (request, reply) => {
+    try {
+      const id = request.params.id;
+
+      const product = await db.getById(id);
+
+      reply.code(200).send(product);
+    } catch (error) {
+      reply.code(500).send({ menssage: error });
+    }
+  });
+
   fastify.get("/product/company/:id", async (request, reply) => {
-    const companyId = request.params.id;
+    try {
+      const companyId = request.params.id;
 
-    let products = await db.getByCompany(companyId);
+      const products = await db.getByCompany(companyId);
 
-    return products;
+      reply.code(200).send(products);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
+  });
+
+  fastify.put("/product/:id", async (request, reply) => {
+    const product = request.body;
+    const id = request.params.id;
+
+    try {
+      const update = db.update(id, product);
+
+      reply.code(201).send(update);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
   });
 };
 
