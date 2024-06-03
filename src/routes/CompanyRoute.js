@@ -44,6 +44,17 @@ const companyRoute = async (fastify, options) => {
       reply.code(500).send({ message: error });
     }
   });
+
+  fastify.get("/company/validate/:id", async (request, reply) => {
+    const id = request.params.id;
+
+    try {
+      const response = await db.validateId(id);
+      reply.code(200).send(response);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
+  });
 };
 
 module.exports = companyRoute;

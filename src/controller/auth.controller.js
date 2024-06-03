@@ -12,7 +12,7 @@ class Auth {
 
     const newPassord = bcrypt.hashSync(password, 10);
 
-    const register = sql`INSERT 
+    const register = await sql`INSERT 
     INTO users(id, name, email, password, id_company) 
     VALUES (${id}, ${name}, ${email}, ${newPassord}, ${id_company})`;
 

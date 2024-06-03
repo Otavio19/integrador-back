@@ -32,6 +32,15 @@ class Company {
 
     return update;
   }
+
+  async validateId(id) {
+    const company = await sql`SELECT * FROM company WHERE id = ${id}`;
+
+    if (company.length > 0) {
+      return company;
+    }
+    return null;
+  }
 }
 
 module.exports = Company;

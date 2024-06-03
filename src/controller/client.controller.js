@@ -18,17 +18,19 @@ class Client {
 
   async getByCompany(id_company) {
     const client =
-      await sql`SELECT * FROM client WHERE id_company = ${id_company}`;
-
+      await sql`SELECT client.id, client.id_company, client.name AS client_name, client.email, users.name AS seller_name, client.active
+      FROM users
+      INNER JOIN client ON client.id_seller = users.id
+      WHERE client.id_company = ${id_company}`;
     return client;
   }
 
   async create(client) {
     const clientId = randomUUID();
 
-    const { name, email, password, id_seller, id_company } = client;
+    const { name, email, password, id_seller, id_company, active } = client;
 
-    await sql`INSERT INTO client(id, name, email, password, id_seller, id_company) VALUES (${clientId}, ${name}, ${email}, ${password}, ${id_seller}, ${id_company})`;
+    await sql`INSERT INTO client(id, name, email, password, id_seller, id_company, active) VALUES (${clientId}, ${name}, ${email}, ${password}, ${id_seller}, ${id_company}, ${active})`;
   }
 
   async update(id, client) {

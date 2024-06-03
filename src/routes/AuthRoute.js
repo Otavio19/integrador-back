@@ -19,9 +19,9 @@ const AuthRoute = async (fastify, options) => {
     const login = await request.body;
 
     try {
-      const reponse = await db.login(login);
+      const response = await db.login(login);
 
-      reply.code(201).send(reponse);
+      reply.code(201).send(response);
     } catch (error) {
       reply.code(500).send({ message: error });
     }
