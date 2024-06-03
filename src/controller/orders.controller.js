@@ -9,7 +9,6 @@ class Order {
 
   async create(order) {
     const orderId = randomUUID();
-
     const { id_seller, id_client, id_company, price, products } = order;
 
     const result = await sql`INSERT INTO orders
