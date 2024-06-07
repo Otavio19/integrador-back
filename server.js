@@ -20,16 +20,7 @@ fastify.register(AuthRoute);
 fastify.register(orderRoute);
 fastify.register(OrderProductRoute);
 
-const start = async () => {
-  try {
-    await fastify.listen({
-      port: process.env.PORT ?? 3333,
-    });
-    console.log(`Servidor está rodando na porta ${port}`);
-  } catch (err) {
-    console.log(err);
-    process.exit(1);
-  }
-};
-
-start();
+fastify.listen({
+  host: "0.0.0.0",
+  port: process.env.PORT ?? 3333,
+});
