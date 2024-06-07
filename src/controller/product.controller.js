@@ -13,9 +13,11 @@ class Product {
   async create(product) {
     let idProduct = randomUUID();
 
-    const { amount, description, name, price, id_company } = product;
+    const { amount, description, name, price, id_company, img, active } =
+      product;
 
-    await sql`INSERT INTO product(id,amount, description, name, price, id_company) values (${idProduct},${amount},${description},${name},${price},${id_company})`;
+    await sql`INSERT INTO product(id,amount, description, name, price, id_company, img, active) 
+              values (${idProduct},${amount},${description},${name},${price},${id_company},${img}, ${active})`;
   }
 
   async getById(id) {
