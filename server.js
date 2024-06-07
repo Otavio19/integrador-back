@@ -23,9 +23,9 @@ fastify.register(OrderProductRoute);
 const start = async () => {
   try {
     await fastify.listen({
-      port: 3333,
+      port: process.env.PORT ?? 3333,
     });
-    console.log("Servidor está rodando na porta 3333");
+    console.log(`Servidor está rodando na porta ${port}`);
   } catch (err) {
     console.log(err);
     process.exit(1);
