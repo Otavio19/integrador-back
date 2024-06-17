@@ -10,11 +10,12 @@ class OrderProduct {
 
   async getOrdersByCompany(id_company) {
     const orders =
-      await sql`SELECT users.name as seller, client.name as client, orders.price, orders.id, orders.source, orders.status
+      await sql`SELECT users.name as seller, client.name as client, orders.price, orders.id, orders.source, orders.status, orders.created_at
       FROM orders
       INNER JOIN users ON users.id = orders.id_seller
       INNER JOIN client ON client.id = orders.id_client
-      WHERE orders.id_company = ${id_company}`;
+      WHERE orders.id_company = ${id_company}
+      ORDER BY created_at DESC`;
     return orders;
   }
 
@@ -48,10 +49,10 @@ class OrderProduct {
   }
 
   async addOrder(orderId, info) {
-    const { id_seller, id_client, id_company, price, source } = info;
+    const { id_seller, id_client, id_company, price, source, status } = info;
     const response =
-      await sql`INSERT INTO orders (id, id_seller, id_company, id_client, price, source) 
-                            VALUES (${orderId}, ${id_seller}, ${id_company}, ${id_client}, ${price}, ${source})`;
+      await sql`INSERT INTO orders (id, id_seller, id_company, id_client, price, source, status) 
+                            VALUES (${orderId}, ${id_seller}, ${id_company}, ${id_client}, ${price}, ${source}, ${status})`;
     return response;
   }
 
