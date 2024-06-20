@@ -44,6 +44,17 @@ const OrderProductRoute = async (fastify, options) => {
     }
   });
 
+  fastify.put("/orderProduct/invoiceOrder/:idOrder", async (request, reply) => {
+    const id = request.params.idOrder;
+
+    try {
+      const invoice = db.invoiceOrder(id);
+      reply.code(200).send(invoice);
+    } catch (error) {
+      reply.code(500).send("Erro: ", error);
+    }
+  });
+
   //Buscar Informações dos pedidos por Empresa:
   fastify.get("/orderProduct/:idCompany", async (request, reply) => {
     const id_company = request.params.idCompany;

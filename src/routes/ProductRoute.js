@@ -21,7 +21,7 @@ const productRoute = async (fastify, options) => {
       const authorizationHeader = request.headers.authorization;
       let token = authorizationHeader;
       let product = request.body;
-      console.log("produto" + product);
+      console.log("produto: " + product);
 
       if (!token || token == undefined) {
         return reply
@@ -55,9 +55,9 @@ const productRoute = async (fastify, options) => {
     try {
       const id = request.params.id;
 
-      const product = await db.getById(id);
+      await db.getById(id);
 
-      reply.code(200).send(product);
+      reply.code(200).send({ message: "Pedido Faturado!" });
     } catch (error) {
       reply.code(500).send({ menssage: error });
     }

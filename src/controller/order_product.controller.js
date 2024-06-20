@@ -63,6 +63,12 @@ class OrderProduct {
                               VALUES (${id}, ${id_order}, ${id_product}, ${price}, ${amount})`;
     return response;
   }
+
+  async invoiceOrder(id) {
+    await sql`UPDATE orders SET status='invoiced' WHERE id =${id}`;
+
+    return { message: "Pedido Faturado com Sucesso!" };
+  }
 }
 
 module.exports = OrderProduct;
