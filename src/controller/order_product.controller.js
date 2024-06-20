@@ -69,6 +69,21 @@ class OrderProduct {
 
     return { message: "Pedido Faturado com Sucesso!" };
   }
+
+  async getOrderById(id) {
+    const order = await sql`
+    SELECT orders.id, users.name as seller, orders.created_at, client.name as client, orders.price, orders.source, orders.status
+    FROM orders
+    INNER JOIN users ON users.id = orders.id_seller
+    INNER JOIN client ON client.id = orders.id_client
+    WHERE orders.id = ${id};
+    `;
+
+    if (order.count === 0) {
+      return null;
+    }
+    return order[0];
+  }
 }
 
 module.exports = OrderProduct;

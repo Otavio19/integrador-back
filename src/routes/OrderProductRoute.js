@@ -67,6 +67,18 @@ const OrderProductRoute = async (fastify, options) => {
       reply.code(500).send({ message: error });
     }
   });
+
+  //Buscar Pedido por ID:
+  fastify.get("/orderProduct/order/:idOrder", async (request, reply) => {
+    const idOrder = request.params.idOrder;
+
+    try {
+      const order = await db.getOrderById(idOrder);
+      reply.code(200).send(order);
+    } catch (error) {
+      reply.code(500).send({ message: error });
+    }
+  });
 };
 
 module.exports = OrderProductRoute;
