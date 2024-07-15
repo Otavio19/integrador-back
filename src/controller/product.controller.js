@@ -38,7 +38,7 @@ class Product {
                             INNER JOIN category ON category.id = product.id_category 
                             WHERE product.id = ${id}`;
 
-    return product;
+    return product[0];
   }
 
   async getByCompany(id_company) {
