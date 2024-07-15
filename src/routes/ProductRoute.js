@@ -42,7 +42,7 @@ const productRoute = async (fastify, options) => {
 
       const result = await db.create(product);
       console.log(result);
-      reply.code(201).send(result);
+      reply.code(200).send(result);
     } catch (error) {
       console.error("Error:", error);
       reply
@@ -55,9 +55,9 @@ const productRoute = async (fastify, options) => {
     try {
       const id = request.params.id;
 
-      await db.getById(id);
+      const product = await db.getById(id);
 
-      reply.code(200).send({ message: "Pedido Faturado!" });
+      reply.code(200).send(product);
     } catch (error) {
       reply.code(500).send({ menssage: error });
     }
@@ -82,7 +82,7 @@ const productRoute = async (fastify, options) => {
     try {
       const update = db.update(id, product);
 
-      reply.code(201).send(update);
+      reply.code(201).send({ message: "Produto Editado com Sucesso!" });
     } catch (error) {
       reply.code(500).send({ message: error });
     }

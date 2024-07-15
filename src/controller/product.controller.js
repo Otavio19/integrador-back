@@ -13,22 +13,39 @@ class Product {
   async create(product) {
     let idProduct = randomUUID();
 
-    const { amount, description, name, price, id_company, img, active } =
-      product;
+    const {
+      amount,
+      description,
+      name,
+      price,
+      id_company,
+      img,
+      active,
+      id_category,
+    } = product;
 
-    await sql`INSERT INTO product(id,amount, description, name, price, id_company, img, active) 
-              values (${idProduct},${amount},${description},${name},${price},${id_company},${img}, ${active})`;
+    await sql`INSERT INTO 
+              product(id,amount, description, name, price, id_company, img, active, id_category) 
+              values 
+              (${idProduct},${amount},${description},${name},${price},${id_company},${img}, ${active}, ${id_category})`;
+
+    return { message: "Produto cadastrado com sucesso!" };
   }
 
   async getById(id) {
-    let product = await sql`SELECT * FROM product WHERE id = ${id}`;
+    let product = await sql`select product.*, category.name AS category
+                            FROM product
+                            INNER JOIN category ON category.id = product.id_category 
+                            WHERE product.id = ${id}`;
 
     return product;
   }
 
   async getByCompany(id_company) {
-    let products =
-      await sql`SELECT * FROM product WHERE id_company =${id_company}`;
+    let products = await sql`select product.*, category.name AS category
+FROM product
+INNER JOIN category ON category.id = product.id_category
+WHERE product.id_company = ${id_company}`;
 
     return products;
   }
@@ -44,7 +61,7 @@ class Product {
     active = ${active}
     WHERE id = ${id}`;
 
-    return update;
+    return { message: "Produto Editado!" };
   }
 }
 

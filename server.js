@@ -7,6 +7,7 @@ const clientRoute = require("./src/routes/ClientRoute.js");
 const AuthRoute = require("./src/routes/AuthRoute.js");
 const orderRoute = require("./src/routes/OrderRoute.js");
 const OrderProductRoute = require("./src/routes/OrderProductRoute.js");
+const categoryRoute = require("./src/routes/CategoryRoute.js");
 
 fastify.register(cors, {
   origin: "*",
@@ -19,6 +20,7 @@ fastify.register(clientRoute);
 fastify.register(AuthRoute);
 fastify.register(orderRoute);
 fastify.register(OrderProductRoute);
+fastify.register(categoryRoute);
 
 fastify.listen({
   host: "0.0.0.0",
