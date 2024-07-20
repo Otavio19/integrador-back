@@ -13,6 +13,7 @@ const OrderProductRoute = async (fastify, options) => {
     }
   });
 
+  //Buscar pedido completo
   fastify.get("/orderProduct/products/:idOrder", async (request, reply) => {
     const idOrder = request.params.idOrder;
 
@@ -68,7 +69,7 @@ const OrderProductRoute = async (fastify, options) => {
     }
   });
 
-  //Buscar Pedido por ID:
+  //Buscar informações do pedido por ID
   fastify.get("/orderProduct/order/:idOrder", async (request, reply) => {
     const idOrder = request.params.idOrder;
 

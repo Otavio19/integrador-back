@@ -13,7 +13,7 @@ class Client {
   async getById(id) {
     const client = await sql`SELECT * FROM client WHERE id = ${id}`;
 
-    return client;
+    return client[0];
   }
 
   async getByCompany(id_company) {
@@ -28,20 +28,26 @@ class Client {
   async create(client) {
     const clientId = randomUUID();
 
-    const { name, email, password, id_seller, id_company, active } = client;
+    const { name, email, password, id_seller, id_company, active, cpf, phone } =
+      client;
 
-    await sql`INSERT INTO client(id, name, email, password, id_seller, id_company, active) VALUES (${clientId}, ${name}, ${email}, ${password}, ${id_seller}, ${id_company}, ${active})`;
+    const response =
+      await sql`INSERT INTO client(id, name, email, password, id_seller, id_company, active, cpf, phone) VALUES (${clientId}, ${name}, ${email}, ${password}, ${id_seller}, ${id_company}, ${active}, ${cpf}, ${phone})`;
+
+    return response;
   }
 
   async update(id, client) {
-    const { name, email, password, active } = client;
+    const { name, email, password, active, cpf, phone } = client;
 
     const cliente = await sql`
     UPDATE client SET
     name = ${name},
     email = ${email},
     password = ${password},
-    active = ${active}
+    active = ${active},
+    cpf = ${cpf},
+    phone = ${phone}
     WHERE id = ${id}`;
 
     return cliente;

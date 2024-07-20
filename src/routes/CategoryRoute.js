@@ -28,7 +28,7 @@ const categoryRoute = async (fastify, options) => {
     const id_category = request.params.id_category;
 
     try {
-      const productsByCategory = await db.getProductssByCategory(id_category);
+      const productsByCategory = await db.getProductsByCategory(id_category);
 
       reply.code(200).send(productsByCategory);
     } catch (err) {

@@ -41,9 +41,15 @@ const clientRoute = async (fastify, options) => {
       const client = response.body;
       const result = await db.create(client);
       console.log(result);
-      reply.code(201).send(result);
+      reply
+        .code(201)
+        .send({ message: "Cliente Cadastrado com Sucesso.", type: true });
     } catch (error) {
-      reply.code(500).send({ message: error });
+      if (error.code === "23505") {
+        reply.code(400).send({ message: "CPF já existente.", type: false });
+      } else {
+        reply.code(500).send({ message: error.message, type: false });
+      }
     }
   });
 
@@ -54,7 +60,11 @@ const clientRoute = async (fastify, options) => {
       const update = db.update(id, cliente);
       reply.code(201).send(update);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      if (error.code === "23505") {
+        reply.code(400).send({ message: "CPF já existente.", type: false });
+      } else {
+        reply.code(500).send({ message: error.message, type: false });
+      }
     }
   });
 };

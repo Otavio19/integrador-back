@@ -23,7 +23,7 @@ class OrderProduct {
     console.log("ID do pedido", id);
     try {
       const orderInfo =
-        await sql`SELECT users.name, client.name, orders.id, orders.price
+        await sql`SELECT users.name, client.name, orders.id, orders.price, orders.id_client
                         FROM orders
                         INNER JOIN users ON users.id = orders.id_seller
                         INNER JOIN client ON client.id = orders.id_client
@@ -72,7 +72,7 @@ class OrderProduct {
 
   async getOrderById(id) {
     const order = await sql`
-    SELECT orders.id, users.name as seller, orders.created_at, client.name as client, orders.price, orders.source, orders.status
+    SELECT orders.id, users.name as seller, orders.created_at, client.name as client, orders.price, orders.source, orders.status, orders.id_client
     FROM orders
     INNER JOIN users ON users.id = orders.id_seller
     INNER JOIN client ON client.id = orders.id_client

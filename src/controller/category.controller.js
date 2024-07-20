@@ -20,13 +20,18 @@ class Category {
   }
 
   async getProductsByCategory(id_category) {
-    const category =
+    const categoryQuery =
       await sql`SELECT * FROM category WHERE id = ${id_category}`;
+    const category = categoryQuery[0]; // Pegando o primeiro resultado, se houver
 
-    const products =
-      await sql`SELECT * FROM product WHERE id_category = ${id_category}`;
+    const productsQuery =
+      await sql`SELECT product.*, category.name AS category_name 
+                                    FROM product 
+                                    INNER JOIN category ON category.id = product.id_category 
+                                    WHERE product.id_category = ${id_category}`;
+    const products = productsQuery; // Não precisamos de [0] aqui, pois queremos todos os produtos
 
-    return { category: category[0], products: products };
+    return { category, products };
   }
 
   async update(id, category) {
