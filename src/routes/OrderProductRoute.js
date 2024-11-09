@@ -80,6 +80,12 @@ const OrderProductRoute = async (fastify, options) => {
       reply.code(500).send({ message: error });
     }
   });
+
+  fastify.get("/order/:id_user", async (request, reply) =>{
+    const id_user = request.params.id_user;
+
+    
+  })
 };
 
 module.exports = OrderProductRoute;

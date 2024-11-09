@@ -35,6 +35,17 @@ const orderRoute = async (fastify, options) => {
       reply.code(500).send({ message: error });
     }
   });
+
+  fastify.get("/orderDelivery/:id_delivery", async (request, reply) =>{
+    const id_delivery = request.params.id_delivery;
+
+    try{
+      const response = await db.getOrderDelivery(id_delivery);
+      reply.code(200).send(response)
+    }catch{
+      reply.code(500).send({ message: error });
+    }
+  })
 };
 
 module.exports = orderRoute;

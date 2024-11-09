@@ -39,6 +39,17 @@ GROUP BY
 
     return result;
   }
+
+  async getOrderDelivery(id_delivery){
+    const result = await sql`
+    SELECT  o.id, o.id_client, o.price, o.status, o.created_at, client.name as cliente, c.name as Empresa
+    from orders o 
+    inner join company c ON o.id_company = c.id
+    inner join client ON o.id_client = client.id
+    WHERE id_delivery = ${id_delivery}`;
+
+    return result
+  }
 }
 
 module.exports = Order;
