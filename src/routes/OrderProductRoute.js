@@ -1,5 +1,5 @@
-const OrderProduct = require("../controller/order_product.controller");
-const { randomUUID } = require("crypto");
+import OrderProduct from "../controller/order_product.controller.js";
+import { randomUUID } from "crypto";
 
 const OrderProductRoute = async (fastify, options) => {
   const db = new OrderProduct();
@@ -13,16 +13,14 @@ const OrderProductRoute = async (fastify, options) => {
     }
   });
 
-  //Buscar pedido completo
   fastify.get("/orderProduct/products/:idOrder", async (request, reply) => {
     const idOrder = request.params.idOrder;
 
     try {
       const orders = await db.getAllByOrder(idOrder);
-
       reply.code(200).send(orders);
     } catch (error) {
-      reply.code(error).send({ message: error });
+      reply.code(500).send({ message: error });
     }
   });
 
@@ -49,27 +47,24 @@ const OrderProductRoute = async (fastify, options) => {
     const id = request.params.idOrder;
 
     try {
-      const invoice = db.invoiceOrder(id);
+      const invoice = await db.invoiceOrder(id);
       reply.code(200).send(invoice);
     } catch (error) {
-      reply.code(500).send("Erro: ", error);
+      reply.code(500).send({ message: error });
     }
   });
 
-  //Buscar Informações dos pedidos por Empresa:
   fastify.get("/orderProduct/:idCompany", async (request, reply) => {
     const id_company = request.params.idCompany;
 
     try {
       const info = await db.getOrdersByCompany(id_company);
-
       reply.code(200).send(info);
     } catch (error) {
       reply.code(500).send({ message: error });
     }
   });
 
-  //Buscar informações do pedido por ID
   fastify.get("/orderProduct/order/:idOrder", async (request, reply) => {
     const idOrder = request.params.idOrder;
 
@@ -81,11 +76,11 @@ const OrderProductRoute = async (fastify, options) => {
     }
   });
 
-  fastify.get("/order/:id_user", async (request, reply) =>{
+  fastify.get("/order/:id_user", async (request, reply) => {
     const id_user = request.params.id_user;
 
-    
-  })
+    // Lógica de consulta para esse endpoint ainda precisa ser implementada
+  });
 };
 
-module.exports = OrderProductRoute;
+export default OrderProductRoute;

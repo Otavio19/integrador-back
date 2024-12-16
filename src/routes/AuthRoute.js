@@ -1,4 +1,4 @@
-const Auth = require("../controller/auth.controller.js");
+import Auth from "../controller/auth.controller.js";
 
 const AuthRoute = async (fastify, options) => {
   const db = new Auth();
@@ -28,4 +28,4 @@ const AuthRoute = async (fastify, options) => {
   });
 };
 
-module.exports = AuthRoute;
+export default AuthRoute;

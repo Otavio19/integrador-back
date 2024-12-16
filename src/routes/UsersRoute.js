@@ -1,5 +1,5 @@
-const fastify = require("fastify");
-const User = require("../controller/user.controller.js");
+import fastify from "fastify";
+import User from "../controller/user.controller.js";
 
 const UserRoute = async (fastify, options) => {
   const db = new User();
@@ -7,7 +7,6 @@ const UserRoute = async (fastify, options) => {
   fastify.get("/user", async (request, reply) => {
     try {
       const users = await db.list();
-
       reply.code(200).send(users);
     } catch (error) {
       reply.code(500).send({ message: error });
@@ -29,7 +28,6 @@ const UserRoute = async (fastify, options) => {
 
     try {
       const response = await db.getByCompany(id);
-
       reply.code(200).send(response);
     } catch (error) {
       reply.code(500).send({ message: error });
@@ -42,7 +40,6 @@ const UserRoute = async (fastify, options) => {
 
     try {
       const response = await db.update(id, user);
-
       reply.code(200).send(response);
     } catch (error) {
       reply.code(500).send({ message: error });
@@ -50,4 +47,4 @@ const UserRoute = async (fastify, options) => {
   });
 };
 
-module.exports = UserRoute;
+export default UserRoute;

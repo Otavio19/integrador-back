@@ -1,5 +1,5 @@
-const { randomUUID } = require("crypto");
-const sql = require("../../db.js");
+import { randomUUID } from "crypto";
+import sql from "../../db.js";
 
 class Company {
   async list() {
@@ -15,7 +15,7 @@ class Company {
 
     const { name } = company;
 
-    await sql`insert into company(id, name) values (${companyId},${name})`;
+    await sql`insert into company(id, name) values (${companyId}, ${name})`;
   }
 
   async getById(companyId) {
@@ -27,8 +27,7 @@ class Company {
   async update(id, company) {
     const { name } = company;
 
-    const update = sql`UPDATE company SET
-    name = ${name} WHERE id = ${id}`;
+    const update = await sql`UPDATE company SET name = ${name} WHERE id = ${id}`;
 
     return update;
   }
@@ -43,4 +42,4 @@ class Company {
   }
 }
 
-module.exports = Company;
+export default Company;

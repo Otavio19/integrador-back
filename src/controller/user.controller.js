@@ -1,25 +1,22 @@
-const sql = require("../../db.js");
-const { randomUUID } = require("crypto");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import sql from "../../db.js";
+import { randomUUID } from "crypto";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 const secret_key = "chavesecreta";
 
 class User {
   async list() {
     const users = await sql`SELECT * FROM users`;
-
     return users;
   }
 
   async getById(id) {
-    const user = sql`SELECT * FROM users WHERE id = ${id}`;
-
+    const user = await sql`SELECT * FROM users WHERE id = ${id}`;
     return user;
   }
 
   async getByCompany(id) {
     const users = await sql`SELECT * FROM users WHERE id_company = ${id}`;
-
     return users;
   }
 
@@ -33,25 +30,26 @@ class User {
       active = ${active}
       WHERE id = ${id}
     `;
-
     return update;
   }
 
   async verifyToken(token) {
-    let decodedToken = jwt.verify(token, secret_key);
-    let user = sql`SELECT * FROM users WHERE email = ${decodedToken.userFound.email}`;
-    return user;
+    try {
+      const decodedToken = jwt.verify(token, secret_key);
+      const user = await sql`SELECT * FROM users WHERE email = ${decodedToken.userFound.email}`;
+      return user;
+    } catch (error) {
+      throw new Error("Token inválido ou expirado.");
+    }
   }
 
   async findUserById(userId) {
-    const user = sql`SELECT * FROM users WHERE id = ${userId}`;
-
-    if (!user) {
+    const user = await sql`SELECT * FROM users WHERE id = ${userId}`;
+    if (user.length === 0) {
       return null;
     }
-
-    return user;
+    return user[0];
   }
 }
 
-module.exports = User;
+export default User;

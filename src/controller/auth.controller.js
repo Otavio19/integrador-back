@@ -1,8 +1,9 @@
-const sql = require("../../db.js"); // Interação com o Banco de dados
-const { randomUUID } = require("crypto"); // Criação automatica de um UUID aleatório
-const secret_key = "chavesecreta"; // Chave Secreta para criptografia
-const bcrypt = require("bcrypt"); // Criptografa
-const jwt = require("jsonwebtoken"); // Criação do Token
+import sql from "../../db.js";
+import { randomUUID } from "crypto";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const secret_key = "chavesecreta";
 
 class Auth {
   async register(user) {
@@ -10,11 +11,12 @@ class Auth {
 
     const { name, email, password, id_company } = user;
 
-    const newPassord = bcrypt.hashSync(password, 10);
+    const newPassword = await bcrypt.hash(password, 10);
 
-    const register = await sql`INSERT 
-    INTO users(id, name, email, password, id_company) 
-    VALUES (${id}, ${name}, ${email}, ${newPassord}, ${id_company})`;
+    const register = await sql`
+      INSERT INTO users(id, name, email, password, id_company) 
+      VALUES (${id}, ${name}, ${email}, ${newPassword}, ${id_company})
+    `;
 
     return register;
   }
@@ -23,8 +25,9 @@ class Auth {
     const { email, password } = user;
 
     let userFound = await sql`
-        SELECT * FROM users 
-        WHERE email = ${email}`;
+      SELECT * FROM users 
+      WHERE email = ${email}
+    `;
 
     if (userFound.length === 0) {
       return null;
@@ -38,12 +41,13 @@ class Auth {
     }
 
     userFound[0].password = "";
+
     const token = jwt.sign({ user: userFound[0] }, secret_key, {
       expiresIn: "1h",
     });
 
-    return { token, userFound };
+    return { token, user: userFound[0] };
   }
 }
 
-module.exports = Auth;
+export default Auth;

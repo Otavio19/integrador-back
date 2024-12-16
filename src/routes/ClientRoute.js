@@ -1,72 +1,75 @@
-const Client = require("../controller/client.controller");
+import Client from "../controller/client.controller.js"; // Usando import
+
+// Função para tratar erros e enviar resposta padronizada
+const handleError = (error, reply) => {
+  if (error.code === "23505") {
+    // Erro de CPF duplicado
+    return reply.code(400).send({ message: "CPF já existente.", type: false });
+  } else {
+    // Outros erros
+    console.error(error); // Log para depuração
+    return reply.code(500).send({ message: error.message, type: false });
+  }
+};
 
 const clientRoute = async (fastify, options) => {
   const db = new Client();
 
-  fastify.get("/client", async (response, reply) => {
+  // Listar todos os clientes
+  fastify.get("/client", async (request, reply) => {
     try {
-      const client = await db.list();
-
-      return reply.code(200).send(client);
+      const clients = await db.list();
+      return reply.code(200).send(clients);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      handleError(error, reply);
     }
   });
 
-  fastify.get("/client/:id", async (response, reply) => {
-    const id = response.params.id;
-
+  // Buscar cliente por ID
+  fastify.get("/client/:id", async (request, reply) => {
+    const id = request.params.id;
     try {
       const client = await db.getById(id);
-
-      reply.code(201).send(client);
+      reply.code(200).send(client);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      handleError(error, reply);
     }
   });
 
-  fastify.get("/client/company/:id", async (response, reply) => {
-    const id = response.params.id;
+  // Buscar clientes por ID da empresa
+  fastify.get("/client/company/:id", async (request, reply) => {
+    const id = request.params.id;
     try {
       const clients = await db.getByCompany(id);
-
-      reply.code(201).send(clients);
+      reply.code(200).send(clients);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      handleError(error, reply);
     }
   });
 
-  fastify.post("/client", async (response, reply) => {
+  // Cadastrar um novo cliente
+  fastify.post("/client", async (request, reply) => {
     try {
-      const client = response.body;
+      const client = request.body;
       const result = await db.create(client);
-      console.log(result);
-      reply
-        .code(201)
-        .send({ message: "Cliente Cadastrado com Sucesso.", type: true });
+      console.log(result); // Log de sucesso para depuração
+      reply.code(201).send({ message: "Cliente Cadastrado com Sucesso.", type: true });
     } catch (error) {
-      if (error.code === "23505") {
-        reply.code(400).send({ message: "CPF já existente.", type: false });
-      } else {
-        reply.code(500).send({ message: error.message, type: false });
-      }
+      handleError(error, reply);
     }
   });
 
-  fastify.put("/client/:id", async (response, reply) => {
-    const id = await response.params.id;
-    const cliente = response.body;
+  // Atualizar um cliente existente
+  fastify.put("/client/:id", async (request, reply) => {
+    const id = request.params.id;
+    const client = request.body;
     try {
-      const update = db.update(id, cliente);
-      reply.code(201).send(update);
+      const update = await db.update(id, client);
+      reply.code(200).send(update);
     } catch (error) {
-      if (error.code === "23505") {
-        reply.code(400).send({ message: "CPF já existente.", type: false });
-      } else {
-        reply.code(500).send({ message: error.message, type: false });
-      }
+      handleError(error, reply);
     }
   });
 };
 
-module.exports = clientRoute;
+export default clientRoute; // Usando export default para exportar a função

@@ -1,17 +1,16 @@
-const Company = require("../controller/company.controller.js");
+import Company from "../controller/company.controller.js"; // Usando import
 
 const companyRoute = async (fastify, options) => {
   const db = new Company();
 
   fastify.get("/company", async (request, reply) => {
     const companies = await db.list();
-
     return companies;
   });
 
   fastify.post("/company", async (request, reply) => {
     try {
-      companyData = request.body;
+      const companyData = request.body;
       const result = await db.create(companyData);
       reply.code(201).send(result);
     } catch (error) {
@@ -57,4 +56,4 @@ const companyRoute = async (fastify, options) => {
   });
 };
 
-module.exports = companyRoute;
+export default companyRoute; // Usando export default

@@ -1,5 +1,5 @@
-const { randomUUID } = require("crypto");
-const sql = require("../../db.js");
+import { randomUUID } from "crypto"; // Usando import
+import sql from "../../db.js"; // Usando import
 
 class Client {
   async list() {
@@ -54,4 +54,4 @@ class Client {
   }
 }
 
-module.exports = Client;
+export default Client; // Usando export default

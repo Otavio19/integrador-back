@@ -1,10 +1,9 @@
-const postgres = require("postgres");
-const dotenvConfig = require("dotenv").config;
+import postgres from "postgres";
+import dotenv from "dotenv";
 
-// Carregar as variáveis de ambiente do arquivo .env
-dotenvConfig();
+dotenv.config();
 
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 
 const sql = postgres({
   host: PGHOST,
@@ -18,4 +17,4 @@ const sql = postgres({
   },
 });
 
-module.exports = sql;
+export default sql;

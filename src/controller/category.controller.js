@@ -1,5 +1,5 @@
-const { randomUUID } = require("crypto");
-const sql = require("../../db.js");
+import { randomUUID } from "crypto";
+import sql from "../../db.js";
 
 class Category {
   async create(category) {
@@ -7,7 +7,7 @@ class Category {
     const { name, id_company, active = true } = category;
 
     const response =
-      await sql`INSERT INTO category(id, name,id_company, active) VALUES(${categoryId},${name},${id_company}, ${active})`;
+      await sql`INSERT INTO category(id, name, id_company, active) VALUES(${categoryId}, ${name}, ${id_company}, ${active})`;
 
     return response;
   }
@@ -26,9 +26,9 @@ class Category {
 
     const productsQuery =
       await sql`SELECT product.*, category.name AS category_name 
-                                    FROM product 
-                                    INNER JOIN category ON category.id = product.id_category 
-                                    WHERE product.id_category = ${id_category}`;
+                FROM product 
+                INNER JOIN category ON category.id = product.id_category 
+                WHERE product.id_category = ${id_category}`;
     const products = productsQuery; // Não precisamos de [0] aqui, pois queremos todos os produtos
 
     return { category, products };
@@ -75,4 +75,4 @@ class Category {
   }
 }
 
-module.exports = Category;
+export default Category;

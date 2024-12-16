@@ -1,4 +1,4 @@
-const Category = require("../controller/category.controller");
+import Category from "../controller/category.controller.js";
 
 const categoryRoute = async (fastify, options) => {
   const db = new Category();
@@ -9,7 +9,7 @@ const categoryRoute = async (fastify, options) => {
       const result = await db.create(category);
       reply.code(200).send(result);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      reply.code(500).send({ message: error.message });
     }
   });
 
@@ -20,7 +20,7 @@ const categoryRoute = async (fastify, options) => {
       const category = await db.getByCompany(id_company);
       reply.code(200).send(category);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      reply.code(500).send({ message: error.message });
     }
   });
 
@@ -29,10 +29,9 @@ const categoryRoute = async (fastify, options) => {
 
     try {
       const productsByCategory = await db.getProductsByCategory(id_category);
-
       reply.code(200).send(productsByCategory);
     } catch (err) {
-      reply.code(500).send(err);
+      reply.code(500).send({ message: err.message });
     }
   });
 
@@ -44,7 +43,7 @@ const categoryRoute = async (fastify, options) => {
       await db.update(id, category);
       reply.code(200).send({ message: "Categoria Atualizada" });
     } catch (error) {
-      reply.code(500).send({ message: error });
+      reply.code(500).send({ message: error.message });
     }
   });
 
@@ -55,7 +54,7 @@ const categoryRoute = async (fastify, options) => {
       const response = await db.getById(id);
       reply.code(200).send(response);
     } catch (error) {
-      reply.code(500).send({ message: error });
+      reply.code(500).send({ message: error.message });
     }
   });
 
@@ -66,9 +65,9 @@ const categoryRoute = async (fastify, options) => {
       const response = await db.getCategoryEcommerce(id_company);
       reply.code(200).send(response);
     } catch (err) {
-      reply.code(500).send({ message: error });
+      reply.code(500).send({ message: err.message });
     }
   });
 };
 
-module.exports = categoryRoute;
+export default categoryRoute;
